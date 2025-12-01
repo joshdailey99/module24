@@ -67,39 +67,84 @@ The chief model-comparison benchmark was **ROC AUC (Receiver Operating Character
 | Decision Tree (Baseline) | 94.94% | 97.09% | 88.84% | 
 | Linear SVM (Baseline) | 94.91% | 97.06% | 98.39% | 
 
+---
+
+## 📊 Tuned Model Results (Test Set)
+| Tuned Model | Accuracy | F1 | ROC AUC | 
+|---|---:|---:|---:|
+| Logistic Regression (Tuned) | 94.94% | 97.08% | 98.42% | 
+| KNN (Tuned) | 94.12% | 96.89% | 97.33% | 
+| Decision Tree (Tuned) | 93.77% | 96.65% | 92.31% | 
+| Linear SVM (Tuned) | 94.93% | 97.10% | 98.41% | 
 
 ---
 
+## ✅ Final Model Selection *
+| Selected Model | Accuracy | F1 | ROC AUC | 
+|---|---:|---:|---:|
+| **Linear SVM (Best Tuning Result)** | 94.93% | 97.10% | **98.41%** | 
 
-## 🚀 Next Steps (Future Model Tuning & Comparison Phase 2025)
-Section 12–13 of the notebook will later:
+**Winner model selected** based on highest **ROC AUC on held-out test set**.
 
-1. **Tune ML models using a smaller stratified cross-validation sample**
-2. Benchmark tuned models using:
-   - ROC AUC and PR AUC for ranking quality
-   - confusion matrices at justified business cutoffs
-   - F1 evaluation AFTER selecting an operational decision threshold
-3. Deliver final business reporting including:
-   - Best model selection
-   - improvement deltas
-   - threshold recommendation for automated underwriting
-   - fairness and performance verification
+> **Percentile capping (1st–99th)** was applied on financial outliers instead of dropping 7–8% of applications:
+> - Preserves sample size  
+> - Reduces distortion from extreme values  
+> - Prevents biased model dominance from long-tailed financial signals  
 
 ---
 
-## 📍 Recommendations for Stakeholders (Plain Language)
+## 📍 Key Conclusions 
+- We can **accurately rank and classify approval likelihood with ML**, but must:
+  - Avoid leakage from post-decision outcome fields
+  - Preserve sample size for fair representation
+  - Compare models by probability separability, not a fixed threshold
 
-- ✅ Retain **3 years of data minimum (2022–2024)** to avoid bias from single-year anomalies
-- ✅ **One-hot encode categorical fields** to preserve applicant and loan-structure signals
-- ✅ **Cap extreme financial outliers**, do not drop applications unnecessarily
-- ✅ **Exclude denial-reason fields from predictive modeling** to avoid invalid predictions
-- ✅ Use **ROC AUC as the primary benchmarking metric for model family comparison**
-- ✅ Score **F1 only after choosing an underwriting decision cutoff**
-- 🔁 Continue tuning using **Linear SVM or Logistic Regression families**, then pick an operational threshold before automation.
+- **Linear SVM performed best** at:
+  - Ranking approvals ahead of denials across thresholds
+  - Maintaining strong accuracy and F1 after threshold-free model selection
+  - Supporting next phase underwriting automation integrity
+
+- **KNN performed well after tuning**, but has:
+  - Higher inference cost  
+  - Best used in optimization stage with neighbor search improvements (KD-tree, BallTree, FAISS, or other approximations)  
+
+- **Decision Tree remains valid**, but shows:
+  - Lower ROC AUC separability on full data than linear or margin-based models  
 
 ---
+
+## 💼 Next Steps - Business Applications of Prediction Model
+
+- **Accelerate loan decisions**
+  - The model delivers an early approval likelihood score, enabling loan teams to move the strongest applications forward faster.
+
+- **Work smarter, not harder**
+  - Staff can prioritize time and attention on applications with the highest chance of approval, reducing bottlenecks.
+
+- **Improve buyer experience**
+  - Customers gain faster clarity, allowing more productive conversations centered on outcomes they can realistically achieve.
+
+- **Provide proactive guidance**
+  - When approval likelihood is low, teams can suggest adjusted loan options or credit-building steps *before* a formal denial.
+
+- **Reduce manual review workload**
+  - High-confidence approvals can be pre-flagged for fast-track processing, allowing human review to focus on edge cases only.
+
+- **Enable consistent underwriting support**
+  - Predictions apply uniform criteria across all applicants, providing fair, reliable, and scalable decision-support.
+
+- **Support internal planning**
+  - Approval volume can be forecasted earlier, improving staffing decisions, processing timelines, and capital planning.
+
+- **Create routing tiers**
+  - Applications may be grouped for actioning such as:
+    - **High confidence approval**
+    - **Likely approval**
+    - **Needs review**
+    - **High risk**
+  - These tiers guide effort prioritization and potential future automation.
 
 > **Conclusion:**  
-A probability-aware baseline based on ROC AUC ensures fair model comparison and supports next-phase model tuning, threshold selection, and underwriting automation integrity.
+> The model becomes a decision-support tool that allows the business to estimate approval earlier, work more intelligently, respond faster to buyers, and plan capacity reliably — without depending on information that cannot be known at submission time.
 
----
+
